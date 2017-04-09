@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.emc.app.controller.admin.MimeTypes;
 import com.emc.app.entity.Entity;
 import com.emc.app.entity.product.Product;
 import com.emc.app.entity.product.ProductImg;
@@ -54,10 +55,15 @@ public class ProductControllerImp implements ProductController {
 			if(!filePath02.exists()) filePath02.mkdir();
 			File filePath03 = new File(contentPath +"/"+mcc+"/"+mcId+"/"+id);
 			if(!filePath03.exists()) filePath03.mkdir();
-			String orgName = multipartFile.getOriginalFilename();
-			String filePath = contentPath +"/"+mcc+"/"+mcId+"/"+id+"/"+orgName;
+			
+			String fname = multipartFile.getName();
+			String contentType = multipartFile.getContentType();
+			String ext = MimeTypes.getMimeTypeExt(contentType);
+			String filePath = contentPath +"/"+mcc+"/"+mcId+"/"+id+"/"+fname+"."+ext;
+			
 			File file = new File(filePath);
 			byte[] bytes = multipartFile.getBytes();
+			
 			FileUtils.writeByteArrayToFile(file, bytes);
 			
 			// get product data
